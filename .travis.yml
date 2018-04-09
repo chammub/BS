@@ -61,8 +61,8 @@ matrix:
     - pub global activate flutter_plugin_tools
     script:
     - "./flutter/bin/flutter -v build apk"
-    after_success:
-    - sh set_tags.sh
+    #after_success:
+    #- sh set_tags.sh
     notifications:
       email: true
     deploy:
