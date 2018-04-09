@@ -20,7 +20,7 @@ matrix:
     - flutter doctor
     - pub global activate flutter_plugin_tools
     script:
-    - "./script/plugin_tools.sh format --travis --clang-format=clang-format-5.0"
+    - "./flutter/bin/flutter format --travis --clang-format=clang-format-5.0"
   - os: linux
     env:
     - SHARD=Build-example-APKs
@@ -69,12 +69,13 @@ matrix:
       provider: releases
       api_key:
         secure: u6b7LakWNifaBjo29GqG49LBsF8bAIJoPXmQN3XF5XpN1l6JM6pIFMjY9FWp7gnqUBEY6NVKovurHDFn5VYpA5x6R5CPcivlxhS2GXjPdbof9QePfmZx9sJwHUb0+VWWIwUubV7pxBNi4bcaD1QSS9+B23cUZd5Pp5QP9rKUYrO/3vx18zbguNq5npCKzLKmgxAxNhxfyKvg0wWe7hEJAIjrjd0Fyt4Kje+CMEccd8ooV9WWCQXZQJPZiGWgCOLFF1G/dZOdr5l3tVhLyd2JN3U2uk+VX93/x9hcye4Fq9LDDVW2fZs5BhqICq5xZ11ouTAwaRZfgZ+9MDsWfq8PJKwi07btgRPy8D3gOHqa0POJJBKJHPFIjCytUzYDDMtqgCpDxX3i7YKmXACGJ9ItF94WDSFug+SBrgJBUAQpG0NIBjIoSo5e/fF8BUK6LNtPl5dML/5hWuEKfEbh5Kpxx5p6xFnbgtUjoOs3h1ForTE9jdZrYhJvRAb0EsNVAEyK11lCgdjh7ja0ADyndDuVdauNxtj9m4wJgIIpXNHH1qAYWYEEAVcCYrcr/X2WqNgyH2HJPovNvIIpkgCs/dgPD3gYzkvloBhwkBBYtSF7lqVRSvjomdn+D36Eo4Jjl92tjykq4ZfgRNwBxVwbjxvki2Fo8mf2EVjygRnjHOtjPC0=
-      file: BS/build/outputs/apk/release/app-release.apk
+      file: build/app/outputs/apk/release/app-release.apk
       file_glob: 'true'
       skip_cleanup: true
       on:
         branch: master
         repo: chammub/BS
+        tags: true
 cache:
   directories:
   - "$HOME/.pub-cache"
