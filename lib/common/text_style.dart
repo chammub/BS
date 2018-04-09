@@ -55,6 +55,11 @@ class Style {
   static final cartAddTextStyle = baseTextStyle.copyWith(
       color: Colors.green, fontSize: 15.0, fontWeight: FontWeight.w500);
 
+  static final foodMenuHeaderTextStyle =
+      Style.baseTextStyle.copyWith(fontSize: 16.0, fontWeight: FontWeight.w500);
+  static final foodMenuItemTextStyle =
+      Style.baseTextStyle.copyWith(fontSize: 15.0, fontWeight: FontWeight.w400);
+
   // home menu style
 //  static final homeContentTextStyle = baseTextStyle.copyWith(
 //      color: Colors.black, fontSize: 20.0, fontWeight: FontWeight.w400);

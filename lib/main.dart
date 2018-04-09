@@ -1,6 +1,5 @@
+import 'package:bhavani_shoppe/home.dart';
 import 'package:flutter/material.dart';
-
-import 'ui/home.dart';
 // import 'ui/food/home/master_page.dart';
 
 void main() {

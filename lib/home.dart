@@ -1,8 +1,8 @@
+import 'package:bhavani_shoppe/about/about_home.dart';
+import 'package:bhavani_shoppe/common/gradient_colors.dart';
+import 'package:bhavani_shoppe/common/text_style.dart';
+import 'package:bhavani_shoppe/food/food_menu_home.dart';
 import 'package:bhavani_shoppe/model/homeGrid.dart';
-import 'package:bhavani_shoppe/ui/about/about_home.dart';
-import 'package:bhavani_shoppe/ui/common/gradient_colors.dart';
-import 'package:bhavani_shoppe/ui/common/text_style.dart';
-import 'package:bhavani_shoppe/ui/food/master/master_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart' show timeDilation;
 
@@ -30,10 +30,9 @@ class HomeGradientAppBar extends StatelessWidget {
     final double statusBarHeight = MediaQuery.of(context).padding.top;
 
     return new Container(
-      padding: new EdgeInsets.only(top: statusBarHeight),
-      height: statusBarHeight + barHeight,
-      child: new Row(
-        children: <Widget>[
+        padding: new EdgeInsets.only(top: statusBarHeight),
+        height: statusBarHeight + barHeight,
+        child: new Row(children: <Widget>[
           new Container(
               child: new Hero(
                   tag: "logo-hero",
@@ -46,17 +45,12 @@ class HomeGradientAppBar extends StatelessWidget {
                     ),
                   ))),
           new Container(
-            margin: const EdgeInsets.only(top: 25.0),
-            child: new Image.asset(
-              'res/images/ic_logo_text.png',
-              height: 100.0,
-              // width: 90.0,
-              fit: BoxFit.contain,
-            ),
-          )
-        ],
-      ),
-    );
+              margin: const EdgeInsets.only(top: 25.0),
+              child: new Image.asset('res/images/ic_logo_text.png',
+                  height: 100.0,
+                  // width: 90.0,
+                  fit: BoxFit.contain))
+        ]));
   }
 }
 
@@ -64,31 +58,25 @@ class HomePageBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Expanded(
-      child: new Container(
-        // color: Colors.yellowAccent,
-        child: new CustomScrollView(
-          scrollDirection: Axis.vertical,
-          shrinkWrap: false,
-          slivers: <Widget>[
-            new SliverPadding(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 10.0, horizontal: 10.0),
-                sliver: new SliverGrid(
+        child: new Container(
+            child: new CustomScrollView(
+                scrollDirection: Axis.vertical,
+                shrinkWrap: false,
+                slivers: <Widget>[
+          new SliverPadding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+              sliver: new SliverGrid(
                   gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       // childAspectRatio: 1.1,
                       mainAxisSpacing: 2.0,
                       crossAxisSpacing: 2.0),
                   delegate: new SliverChildBuilderDelegate(
-                    (context, index) =>
-                        new HomeGridBuilder(homeGridList[index]),
-                    childCount: homeGridList.length,
-                  ),
-                )),
-          ],
-        ),
-      ),
-    );
+                      (context, index) =>
+                          new HomeGridBuilder(homeGridList[index]),
+                      childCount: homeGridList.length)))
+        ])));
   }
 }
 

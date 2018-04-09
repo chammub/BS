@@ -1,5 +1,5 @@
+import 'package:bhavani_shoppe/common/text_style.dart';
 import 'package:bhavani_shoppe/model/foodMenuItem.dart';
-import 'package:bhavani_shoppe/ui/common/text_style.dart';
 import 'package:flutter/material.dart';
 
 class CartHome extends StatefulWidget {
