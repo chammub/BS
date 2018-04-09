@@ -87,7 +87,7 @@ matrix:
         - pub global activate flutter_plugin_tools
       script:
        # - ./script/plugin_tools.sh build-examples --apk
-        - ./flutter/bin/flutter --apk
+        - ./flutter/bin/flutter -v build apk
     # Job 4) Build example IPAs
     - os: osx
       env:
@@ -106,7 +106,7 @@ matrix:
         - pub global activate flutter_plugin_tools
       script:
         #- ./script/plugin_tools.sh build-examples --ipa
-        - ./flutter/bin/flutter --ipa
+        - ./flutter/bin/flutter -v build ios --no-codesign
 
 cache:
   directories:
