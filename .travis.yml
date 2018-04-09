@@ -2,27 +2,6 @@ matrix:
   include:
   - os: linux
     env:
-    - SHARD=Format+Test
-    jdk: oraclejdk8
-    sudo: false
-    addons:
-      apt:
-        sources:
-        - ubuntu-toolchain-r-test
-        - llvm-toolchain-precise
-        packages:
-        - libstdc++6
-        - fonts-droid
-        - clang-format-5.0
-    before_script:
-    - git clone https://github.com/flutter/flutter.git
-    - export PATH=`pwd`/flutter/bin:`pwd`/flutter/bin/cache/dart-sdk/bin:$PATH
-    - flutter doctor
-    - pub global activate flutter_plugin_tools
-    script:
-    - "./flutter/bin/flutter format"
-  - os: linux
-    env:
     - SHARD=Build-example-APKs
     jdk: oraclejdk8
     sudo: false
