@@ -20,7 +20,7 @@ matrix:
     - flutter doctor
     - pub global activate flutter_plugin_tools
     script:
-    - "./flutter/bin/flutter format --travis --clang-format=clang-format-5.0"
+    - "./flutter/bin/flutter format"
   - os: linux
     env:
     - SHARD=Build-example-APKs
