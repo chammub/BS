@@ -1,90 +1,80 @@
 matrix:
   include:
-    # Job 1) Check format and run tests
-    - os: linux
-      env:
-        - SHARD=Format+Test
-      jdk: oraclejdk8
-      sudo: false
-      addons:
-        apt:
-          # Flutter depends on /usr/lib/x86_64-linux-gnu/libstdc++.so.6 version GLIBCXX_3.4.18
-          sources:
-            - ubuntu-toolchain-r-test # if we don't specify this, the libstdc++6 we get is the wrong version
-            - llvm-toolchain-precise # for clang-format-5.0
-          packages:
-            - libstdc++6
-            - fonts-droid
-            - clang-format-5.0
-      before_script:
-        - git clone https://github.com/flutter/flutter.git
-        - export PATH=`pwd`/flutter/bin:`pwd`/flutter/bin/cache/dart-sdk/bin:$PATH
-        - flutter doctor
-        - pub global activate flutter_plugin_tools
-      script:
-        - ./script/plugin_tools.sh format --travis --clang-format=clang-format-5.0
-        # - ./flutter/bin/flutter test
-    # Job 2) Build example APKs
-    - os: linux
-      env:
-        - SHARD=Build-example-APKs
-      jdk: oraclejdk8
-      sudo: false
-      addons:
-        apt:
-          # Flutter depends on /usr/lib/x86_64-linux-gnu/libstdc++.so.6 version GLIBCXX_3.4.18
-          sources:
-            - ubuntu-toolchain-r-test # if we don't specify this, the libstdc++6 we get is the wrong version
-          packages:
-            - lib32stdc++6 # https://github.com/flutter/flutter/issues/6207
-            - libstdc++6
-            - fonts-droid
-      before_script:
-        - wget https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip
-        - mkdir android-sdk
-        - unzip -qq sdk-tools-linux-3859397.zip -d android-sdk
-        - export ANDROID_HOME=`pwd`/android-sdk
-        - export PATH=`pwd`/android-sdk/tools/bin:$PATH
-        - mkdir -p /home/travis/.android # silence sdkmanager warning
-        - echo 'count=0' > /home/travis/.android/repositories.cfg # silence sdkmanager warning
-        # suppressing output of sdkmanager to keep log under 4MB (travis limit)
-        - echo y | sdkmanager "tools" >/dev/null
-        - echo y | sdkmanager "platform-tools" >/dev/null
-        - echo y | sdkmanager "build-tools;26.0.3" >/dev/null
-        - echo y | sdkmanager "platforms;android-26" >/dev/null
-        - echo y | sdkmanager "extras;android;m2repository" >/dev/null
-        - echo y | sdkmanager "extras;google;m2repository" >/dev/null
-        - echo y | sdkmanager "patcher;v4" >/dev/null
-        - sdkmanager --list
-        - wget http://services.gradle.org/distributions/gradle-4.1-bin.zip
-        - unzip -qq gradle-4.1-bin.zip
-        - export GRADLE_HOME=$PWD/gradle-4.1
-        - export PATH=$GRADLE_HOME/bin:$PATH
-        - gradle -v
-        - git clone https://github.com/flutter/flutter.git
-        - export PATH=`pwd`/flutter/bin:`pwd`/flutter/bin/cache/dart-sdk/bin:$PATH
-        - flutter doctor
-        - pub global activate flutter_plugin_tools
-      script:
-        - ./flutter/bin/flutter -v build apk
-
-      after_success:
-        - sh set_tags.sh
-
-      notifications:
-        email: true
-
-      deploy:
-        provider: releases
-        api_key:
-          secure: 1bb8e9b2c6446011e367b62b618b8330340ebee0
-        file: BS/build/outputs/apk/release/app-release.apk
-        file_glob: "true"
-        skip_cleanup: true
-        on:
-          branch: master
-          repo: chammub/BS
-
+  - os: linux
+    env:
+    - SHARD=Format+Test
+    jdk: oraclejdk8
+    sudo: false
+    addons:
+      apt:
+        sources:
+        - ubuntu-toolchain-r-test
+        - llvm-toolchain-precise
+        packages:
+        - libstdc++6
+        - fonts-droid
+        - clang-format-5.0
+    before_script:
+    - git clone https://github.com/flutter/flutter.git
+    - export PATH=`pwd`/flutter/bin:`pwd`/flutter/bin/cache/dart-sdk/bin:$PATH
+    - flutter doctor
+    - pub global activate flutter_plugin_tools
+    script:
+    - "./script/plugin_tools.sh format --travis --clang-format=clang-format-5.0"
+  - os: linux
+    env:
+    - SHARD=Build-example-APKs
+    jdk: oraclejdk8
+    sudo: false
+    addons:
+      apt:
+        sources:
+        - ubuntu-toolchain-r-test
+        packages:
+        - lib32stdc++6
+        - libstdc++6
+        - fonts-droid
+    before_script:
+    - wget https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip
+    - mkdir android-sdk
+    - unzip -qq sdk-tools-linux-3859397.zip -d android-sdk
+    - export ANDROID_HOME=`pwd`/android-sdk
+    - export PATH=`pwd`/android-sdk/tools/bin:$PATH
+    - mkdir -p /home/travis/.android
+    - echo 'count=0' > /home/travis/.android/repositories.cfg
+    - echo y | sdkmanager "tools" >/dev/null
+    - echo y | sdkmanager "platform-tools" >/dev/null
+    - echo y | sdkmanager "build-tools;26.0.3" >/dev/null
+    - echo y | sdkmanager "platforms;android-26" >/dev/null
+    - echo y | sdkmanager "extras;android;m2repository" >/dev/null
+    - echo y | sdkmanager "extras;google;m2repository" >/dev/null
+    - echo y | sdkmanager "patcher;v4" >/dev/null
+    - sdkmanager --list
+    - wget http://services.gradle.org/distributions/gradle-4.1-bin.zip
+    - unzip -qq gradle-4.1-bin.zip
+    - export GRADLE_HOME=$PWD/gradle-4.1
+    - export PATH=$GRADLE_HOME/bin:$PATH
+    - gradle -v
+    - git clone https://github.com/flutter/flutter.git
+    - export PATH=`pwd`/flutter/bin:`pwd`/flutter/bin/cache/dart-sdk/bin:$PATH
+    - flutter doctor
+    - pub global activate flutter_plugin_tools
+    script:
+    - "./flutter/bin/flutter -v build apk"
+    after_success:
+    - sh set_tags.sh
+    notifications:
+      email: true
+    deploy:
+      provider: releases
+      api_key:
+        secure: u6b7LakWNifaBjo29GqG49LBsF8bAIJoPXmQN3XF5XpN1l6JM6pIFMjY9FWp7gnqUBEY6NVKovurHDFn5VYpA5x6R5CPcivlxhS2GXjPdbof9QePfmZx9sJwHUb0+VWWIwUubV7pxBNi4bcaD1QSS9+B23cUZd5Pp5QP9rKUYrO/3vx18zbguNq5npCKzLKmgxAxNhxfyKvg0wWe7hEJAIjrjd0Fyt4Kje+CMEccd8ooV9WWCQXZQJPZiGWgCOLFF1G/dZOdr5l3tVhLyd2JN3U2uk+VX93/x9hcye4Fq9LDDVW2fZs5BhqICq5xZ11ouTAwaRZfgZ+9MDsWfq8PJKwi07btgRPy8D3gOHqa0POJJBKJHPFIjCytUzYDDMtqgCpDxX3i7YKmXACGJ9ItF94WDSFug+SBrgJBUAQpG0NIBjIoSo5e/fF8BUK6LNtPl5dML/5hWuEKfEbh5Kpxx5p6xFnbgtUjoOs3h1ForTE9jdZrYhJvRAb0EsNVAEyK11lCgdjh7ja0ADyndDuVdauNxtj9m4wJgIIpXNHH1qAYWYEEAVcCYrcr/X2WqNgyH2HJPovNvIIpkgCs/dgPD3gYzkvloBhwkBBYtSF7lqVRSvjomdn+D36Eo4Jjl92tjykq4ZfgRNwBxVwbjxvki2Fo8mf2EVjygRnjHOtjPC0=
+      file: BS/build/outputs/apk/release/app-release.apk
+      file_glob: 'true'
+      skip_cleanup: true
+      on:
+        branch: master
+        repo: chammub/BS
 cache:
   directories:
-    - $HOME/.pub-cache
+  - "$HOME/.pub-cache"
