@@ -4,12 +4,12 @@ import 'package:bhavani_shoppe/common/text_style.dart';
 import 'package:bhavani_shoppe/food/food_menu_home.dart';
 import 'package:bhavani_shoppe/model/homeGrid.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart' show timeDilation;
+// import 'package:flutter/scheduler.dart' show timeDilation;
 
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    timeDilation = 2.0; // 1.0 is normal animation speed.
+    // timeDilation = 2.0; // 1.0 is normal animation speed.
     return new Scaffold(
         body: new Container(
             decoration:

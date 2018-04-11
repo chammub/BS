@@ -38,7 +38,7 @@ class Style {
       color: Colors.white,
       fontSize: 20.0,
       fontWeight: FontWeight.w400,
-      letterSpacing: 0.5);
+      letterSpacing: 1.0);
 
   // menu list style
   static final menuListItemTitleTextStyle = baseTextStyle.copyWith(

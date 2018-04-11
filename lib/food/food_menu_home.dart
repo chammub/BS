@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:ui' as ui;
 
+import 'package:bhavani_shoppe/common/cart_home.dart';
 import 'package:bhavani_shoppe/common/text_style.dart';
 import 'package:bhavani_shoppe/food/food_menu_detail.dart';
 import 'package:bhavani_shoppe/model/foodMenu.dart';
@@ -18,22 +20,24 @@ class FoodHomePage extends StatelessWidget {
             border: Border(
                 bottom: BorderSide(width: 0.5, color: Colors.grey[300]))),
         height: 75.0,
-        child: new Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              new Padding(
-                  padding: const EdgeInsets.only(top: 30.0),
-                  child: new BackButton(color: Colors.black)),
-              new Hero(
-                  tag: "logo-hero",
-                  child: new Image.asset('res/images/ic_logo.png',
-                      height: 35.0, width: 35.0, fit: BoxFit.contain)),
-              new Padding(
-                  padding: const EdgeInsets.only(left: 10.0, bottom: 7.5),
-                  child: new Text("BHAVANI FOOD",
-                      style: Style.foodMenuHeaderTextStyle))
-            ]));
+        child: new BackdropFilter(
+            filter: new ui.ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+            child: new Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  new Padding(
+                      padding: const EdgeInsets.only(top: 30.0),
+                      child: new BackButton(color: Colors.black)),
+                  new Hero(
+                      tag: "logo-hero",
+                      child: new Image.asset('res/images/ic_logo.png',
+                          height: 35.0, width: 35.0, fit: BoxFit.contain)),
+                  new Padding(
+                      padding: const EdgeInsets.only(left: 10.0, bottom: 7.5),
+                      child: new Text("BHAVANI FOOD",
+                          style: Style.foodMenuHeaderTextStyle))
+                ])));
 
     Expanded pageContent = new Expanded(
         child: new Container(
@@ -126,12 +130,11 @@ class _FoodMenuBuilderState extends State<FoodMenuBuilder> {
     _navigateAndDisplaySelection(BuildContext context) {
       Navigator.of(context).push(
             new PageRouteBuilder(
-              pageBuilder: (context, __, ___) =>
-                  new DetailPage(widget.foodMenu),
-              transitionsBuilder:
-                  (context, animation, secondaryAnimation, child) =>
-                      new FadeTransition(opacity: animation, child: child),
-            ),
+                pageBuilder: (context, __, ___) =>
+                    new DetailPage(widget.foodMenu),
+                transitionsBuilder:
+                    (context, animation, secondaryAnimation, child) =>
+                        new FadeTransition(opacity: animation, child: child)),
           );
       // After the Selection Screen returns a result, show it in a bottom!
       Scaffold.of(context).showBottomSheet((BuildContext bottomSheetContext) {
@@ -197,7 +200,13 @@ class _FoodMenuBuilderState extends State<FoodMenuBuilder> {
                         child: new GestureDetector(
                             onTap: () {
                               // navigate to cart
-                              print('Navigation to Cart triggered');
+                              Navigator.of(context).push(new PageRouteBuilder(
+                                  pageBuilder: (context, __, ___) =>
+                                      new CartHome(),
+                                  transitionsBuilder: (context, animation,
+                                          secondaryAnimation, child) =>
+                                      new FadeTransition(
+                                          opacity: animation, child: child)));
                             },
                             child: new Row(
                                 mainAxisSize: MainAxisSize.min,

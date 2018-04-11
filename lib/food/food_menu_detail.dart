@@ -5,7 +5,6 @@ import 'package:bhavani_shoppe/common/text_style.dart';
 import 'package:bhavani_shoppe/model/foodMenu.dart';
 import 'package:bhavani_shoppe/model/foodMenuItem.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class DetailPage extends StatefulWidget {
   static _DetailPageState of(BuildContext context) =>
@@ -18,15 +17,9 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   int _totalCartCount = 0;
   int _totalPrice = 0;
-//  bool globalClearCartValues = false;
-//
-//  getSharedPreferences() async {
-//    SharedPreferences prefs = await SharedPreferences.getInstance();
-//    globalClearCartValues = prefs.getBool("globalClearCartValues");
-//    print("globalClearCartValues called " + globalClearCartValues.toString());
-//  }
 
   void incrementModelOrderCount(String id) {
     setState(() {
@@ -65,33 +58,30 @@ class _DetailPageState extends State<DetailPage> {
   @override
   void initState() {
     super.initState();
-    print("detail page init called!");
-//    getSharedPreferences().then((data) {
-//      if (!globalClearCartValues) {
-//        print("globalClearCartValues Cart Cleared!");
-//        _cartItems = [];
-//      }
-//      print("globalClearCartValues " + globalClearCartValues.toString());
-//    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      body: new Container(
-        constraints: new BoxConstraints.expand(),
-        color: Colors.white, // new Color(0xFF736AB7),
-        child: new Stack(
-          children: <Widget>[
-            _getBackground(),
-            _getGradient(),
-            _getContent(context),
-            _getToolbar(context),
-            _getFooterBar(context),
-          ],
-        ),
-      ),
-    );
+    return new WillPopScope(
+        onWillPop: _requestPop,
+        child: new Scaffold(
+            key: _scaffoldKey,
+            body: new Container(
+                constraints: new BoxConstraints.expand(),
+                color: Colors.white, // new Color(0xFF736AB7),
+                child: new Stack(children: <Widget>[
+                  _getBackground(),
+                  _getGradient(),
+                  _getContent(context),
+                  _getToolbar(context),
+                  _getFooterBar(context)
+                ]))));
+  }
+
+  Future<bool> _requestPop() {
+    // TODO
+    print("will pop scope detail page!!");
+    return new Future.value(true);
   }
 
   Container _getBackground() {
@@ -125,62 +115,6 @@ class _DetailPageState extends State<DetailPage> {
 
   Container _getFoodThumbnail(context) {
     return new Container(
-        child: new Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              new Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    new Container(
-                        margin: const EdgeInsets.only(bottom: 2.0, top: 2.0),
-                        child: new Row(children: <Widget>[
-                          new Container(
-                              margin: const EdgeInsets.only(right: 7.5),
-                              child: new Icon(Icons.access_time,
-                                  size: 20.0, color: Colors.white)),
-                          new Text(widget.foodMenu.duration,
-                              style: Style.detailPageHeaderTextStyle)
-                        ])),
-                    new Text('Delivery Time',
-                        style: Style.baseTextStyle.copyWith(
-                            color: Colors.white,
-                            fontSize: 12.5,
-                            fontWeight: FontWeight.w400))
-                  ]),
-              new Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    new Container(
-                        width: 100.0,
-                        margin: const EdgeInsets.only(top: 50.0, right: 15.0),
-                        child: new Column(children: <Widget>[
-                          new Text(widget.foodMenu.name.toUpperCase(),
-                              style: Style.detailPageHeaderTextStyle1)
-                        ]))
-                  ]),
-              new Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    new Container(
-                        margin: const EdgeInsets.only(bottom: 2.0),
-                        child: new Row(children: <Widget>[
-                          new Container(
-                              margin: const EdgeInsets.only(right: 7.5),
-                              child: new Icon(Icons.restaurant_menu,
-                                  size: 20.0, color: Colors.white)),
-                          new Text('Rs. ' + widget.foodMenu.minOrder,
-                              style: Style.detailPageHeaderTextStyle)
-                        ])),
-                    new Text('Min Order',
-                        style: Style.baseTextStyle.copyWith(
-                            color: Colors.white,
-                            fontSize: 12.5,
-                            fontWeight: FontWeight.w400))
-                  ])
-            ]),
         height: 100.0,
         margin: new EdgeInsets.only(top: 50.0, left: 10.0, right: 10.0),
         decoration: new BoxDecoration(
@@ -192,6 +126,53 @@ class _DetailPageState extends State<DetailPage> {
                   color: Colors.black12,
                   blurRadius: 10.0,
                   offset: new Offset(0.0, 10.0))
+            ]),
+        child: new Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              new Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    new Padding(
+                        padding: const EdgeInsets.only(bottom: 2.5),
+                        child: new Text("Min Order",
+                            style: Style.foodMenuItemTextStyle
+                                .copyWith(color: Colors.white))),
+                    new Row(children: <Widget>[
+                      new Padding(
+                          padding: const EdgeInsets.only(right: 5.0),
+                          child: new Text('₹',
+                              style: const TextStyle(
+                                  fontSize: 15.0, color: Colors.white))),
+                      new Text(widget.foodMenu.minOrder,
+                          style: Style.foodMenuHeaderTextStyle
+                              .copyWith(color: Colors.white))
+                    ])
+                  ]),
+              new Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    new Padding(
+                        padding: const EdgeInsets.only(top: 0.0, bottom: 15.0),
+                        child: new Text(widget.foodMenu.name.toUpperCase(),
+                            style: Style.detailPageHeaderTextStyle1))
+                  ]),
+              new Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    new Padding(
+                        padding: const EdgeInsets.only(bottom: 0.5),
+                        child: new Text("Delivers in",
+                            style: Style.foodMenuItemTextStyle
+                                .copyWith(color: Colors.white))),
+                    new Text(widget.foodMenu.duration,
+                        style: Style.foodMenuHeaderTextStyle
+                            .copyWith(color: Colors.white))
+                  ])
             ]));
   }
 
@@ -230,6 +211,7 @@ class _DetailPageState extends State<DetailPage> {
     int sDynamicCartHeight = _totalCartCount == 0 ? 175 : 225;
     return new Container(
         child: new ListView(
+            // key: _silverListKey,
             padding: new EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 32.0),
             children: <Widget>[
           _getHeader(context),
@@ -256,12 +238,6 @@ class _DetailPageState extends State<DetailPage> {
   }
 
   Container _getToolbar(BuildContext context) {
-    _saveValues() async {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setInt("totalCartItemsCount", _totalCartCount);
-      print("totalCartItemsCount " + _totalCartCount.toString());
-    }
-
     return new Container(
         margin: new EdgeInsets.only(top: MediaQuery.of(context).padding.top),
         child: new IconButton(
@@ -269,10 +245,18 @@ class _DetailPageState extends State<DetailPage> {
             color: Colors.white,
             onPressed: () {
               // save cart items locally
-              _saveValues();
+              //_saveValues();
               // navigate back to food menu list
               Navigator.of(context).pop();
             }));
+  }
+
+  _navigateAndDisplaySelection(BuildContext context) async {
+    // navigate to cart
+    await Navigator.of(context).push(new PageRouteBuilder(
+        pageBuilder: (context, __, ___) => new CartHome(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+            new FadeTransition(opacity: animation, child: child)));
   }
 
   Container _getFooterBar(BuildContext context) {
@@ -319,15 +303,7 @@ class _DetailPageState extends State<DetailPage> {
                           margin: const EdgeInsets.only(right: 20.0),
                           child: new GestureDetector(
                               onTap: () {
-                                // navigate to cart
-                                Navigator.of(context).push(new PageRouteBuilder(
-                                      pageBuilder: (context, __, ___) =>
-                                          new CartHome(),
-                                      transitionsBuilder: (context, animation,
-                                              secondaryAnimation, child) =>
-                                          new FadeTransition(
-                                              opacity: animation, child: child),
-                                    ));
+                                _navigateAndDisplaySelection(context);
                               },
                               child: new Row(
                                   mainAxisSize: MainAxisSize.min,
@@ -414,7 +390,7 @@ class _FoodMenuItemBuilderState extends State<FoodMenuItemBuilder> {
           // icon
           new Container(
               alignment: Alignment.topCenter,
-              margin: const EdgeInsets.only(left: 10.0, top: 7.0, right: 7.5),
+              margin: const EdgeInsets.only(left: 5.0, top: 5.0, right: 7.5),
               child: new Image.asset(
                   widget.foodMenuModelItem.foodType == 'VEG'
                       ? 'res/images/ic_veg_icon.png'
@@ -425,7 +401,7 @@ class _FoodMenuItemBuilderState extends State<FoodMenuItemBuilder> {
           new Container(
               alignment: Alignment.centerLeft,
               margin: const EdgeInsets.only(top: 1.0, left: 5.0, bottom: 5.0),
-              width: 250.0,
+              width: MediaQuery.of(context).size.width - 150.0,
               child: new Column(children: <Widget>[
                 new Container(
                     alignment: Alignment.centerLeft,
@@ -448,31 +424,33 @@ class _FoodMenuItemBuilderState extends State<FoodMenuItemBuilder> {
           _addBtnVisible
               ? new Container(
                   alignment: Alignment.center,
+                  width: 82.5,
                   child: new OutlineButton(
                       child: new Text('ADD', style: Style.cartAddTextStyle),
                       color: Colors.white,
                       borderSide:
-                          new BorderSide(color: Colors.green, width: 4.0),
+                          new BorderSide(color: Colors.green[400], width: 3.5),
                       onPressed: _showBottomContainer))
               : new Container(
                   alignment: Alignment.center,
                   child: new Row(children: <Widget>[
                     new Container(
-                        width: 30.0,
-                        height: 30.0,
+                        width: 25.0,
+                        height: 25.0,
                         //alignment: Alignment.center,
                         child: new IconButton(
-                            icon: new Icon(Icons.remove, color: Colors.red),
+                            icon:
+                                new Icon(Icons.remove, color: Colors.red[300]),
                             alignment: Alignment.topLeft,
-                            iconSize: 20.0,
+                            iconSize: 15.0,
                             padding: const EdgeInsets.only(
                                 bottom: 1.0, top: 3.0, left: 3.0),
                             onPressed: _cartItemDecrement),
                         decoration: new BoxDecoration(
-                            borderRadius: new BorderRadius.all(
-                                new Radius.circular(100.0)),
+                            borderRadius:
+                                new BorderRadius.all(new Radius.circular(5.0)),
                             border: new Border.all(
-                                color: Colors.green, width: 2.0))),
+                                color: Colors.green[400], width: 2.0))),
                     new Container(
                         width: 22.0,
                         margin: const EdgeInsets.symmetric(horizontal: 5.0),
@@ -483,21 +461,21 @@ class _FoodMenuItemBuilderState extends State<FoodMenuItemBuilder> {
                             style: Style.baseTextStyle.copyWith(
                                 fontSize: 17.5, fontWeight: FontWeight.bold))),
                     new Container(
-                        width: 30.0,
-                        height: 30.0,
+                        width: 25.0,
+                        height: 25.0,
                         alignment: Alignment.center,
                         child: new IconButton(
-                            icon: new Icon(Icons.add, color: Colors.red),
+                            icon: new Icon(Icons.add, color: Colors.red[300]),
                             alignment: Alignment.topLeft,
-                            iconSize: 20.0,
+                            iconSize: 15.0,
                             padding: const EdgeInsets.only(
                                 bottom: 1.0, top: 3.0, left: 3.0),
                             onPressed: _cartItemIncrement),
                         decoration: new BoxDecoration(
-                            borderRadius: new BorderRadius.all(
-                                new Radius.circular(100.0)),
+                            borderRadius:
+                                new BorderRadius.all(new Radius.circular(5.0)),
                             border: new Border.all(
-                                color: Colors.green, width: 2.0)))
+                                color: Colors.green[400], width: 2.0)))
                   ]))
         ]));
 
@@ -508,24 +486,25 @@ class _FoodMenuItemBuilderState extends State<FoodMenuItemBuilder> {
           children: <Widget>[
             // exclusive banner
             widget.foodMenuModelItem.exclusiveBanner
-                ? new Image.asset(
-                    'res/images/ic_banner_bhavani_exclusive.png',
-                    height: 27.5,
-                  )
+                ? new Opacity(
+                    opacity: 0.8,
+                    child: new Image.asset(
+                        'res/images/ic_banner_bhavani_exclusive.png',
+                        height: 27.5))
                 : new Container(),
             // must try banner
             widget.foodMenuModelItem.mustTryBanner
-                ? new Image.asset(
-                    'res/images/ic_banner_must_try.png',
-                    height: 27.5,
-                  )
+                ? new Opacity(
+                    opacity: 0.8,
+                    child: new Image.asset('res/images/ic_banner_must_try.png',
+                        height: 27.5))
                 : new Container(),
             // new banner
             widget.foodMenuModelItem.newBanner
-                ? new Image.asset(
-                    'res/images/ic_banner_new.png',
-                    height: 27.5,
-                  )
+                ? new Opacity(
+                    opacity: 0.8,
+                    child: new Image.asset('res/images/ic_banner_new.png',
+                        height: 27.5))
                 : new Container(),
           ],
         ));

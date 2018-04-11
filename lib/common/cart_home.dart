@@ -86,13 +86,18 @@ class _CartHomeState extends State<CartHome> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           new Padding(
-              padding: const EdgeInsets.only(left: 20.0),
-              child: new Image.asset(
-                'res/images/ic_logo.png',
-                height: 35.0,
-                width: 35.0,
-                fit: BoxFit.contain,
-              )),
+              padding: const EdgeInsets.only(top: 30.0),
+              child: new IconButton(
+                  icon: new Icon(Icons.chevron_left, color: Colors.black),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  })
+
+              //new BackButton(color: Colors.black)
+              ),
+          new Image.asset('res/images/ic_logo.png',
+              height: 35.0, width: 35.0, fit: BoxFit.contain),
           new Padding(
               padding: const EdgeInsets.only(left: 10.0, bottom: 7.5),
               child: new Text("CART ITEMS", style: _billHeaderTextStyle))
@@ -333,7 +338,7 @@ class _CartHomeBuilderState extends State<CartHomeBuilder> {
                     width: 25.0,
                     height: 25.0,
                     child: new IconButton(
-                        icon: new Icon(Icons.remove, color: Colors.red),
+                        icon: new Icon(Icons.remove, color: Colors.red[300]),
                         alignment: Alignment.topLeft,
                         iconSize: 15.0,
                         padding: const EdgeInsets.only(
@@ -341,7 +346,7 @@ class _CartHomeBuilderState extends State<CartHomeBuilder> {
                         onPressed: _cartItemDecrement),
                     decoration: new BoxDecoration(
                         borderRadius:
-                            new BorderRadius.all(new Radius.circular(100.0)),
+                            new BorderRadius.all(new Radius.circular(2.5)),
                         border:
                             new Border.all(color: Colors.green, width: 2.0))),
                 new Container(
@@ -358,7 +363,7 @@ class _CartHomeBuilderState extends State<CartHomeBuilder> {
                     height: 25.0,
                     alignment: Alignment.center,
                     child: new IconButton(
-                        icon: new Icon(Icons.add, color: Colors.red),
+                        icon: new Icon(Icons.add, color: Colors.red[300]),
                         alignment: Alignment.topLeft,
                         iconSize: 15.0,
                         padding: const EdgeInsets.only(
@@ -366,7 +371,7 @@ class _CartHomeBuilderState extends State<CartHomeBuilder> {
                         onPressed: _cartItemIncrement),
                     decoration: new BoxDecoration(
                         borderRadius:
-                            new BorderRadius.all(new Radius.circular(100.0)),
+                            new BorderRadius.all(new Radius.circular(2.5)),
                         border:
                             new Border.all(color: Colors.green, width: 2.0)))
               ])),
